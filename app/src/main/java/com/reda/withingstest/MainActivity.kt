@@ -6,10 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.reda.withingstest.ui.images.ImagesScreen
+import com.reda.withingstest.ui.search.SearchScreen
 import com.reda.withingstest.ui.theme.WithingsTestTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,22 +28,31 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = "search_route",
+                    ){
+                        composable(
+                            route = "search_route"
+                        ){
+                            SearchScreen(
+                                navigateToImages = {navController.navigate("images_route/$it")}
+                            )
+                        }
+                        composable(
+                            route = "images_route/{searchQuery}",
+                            arguments =  listOf(navArgument("searchQuery") {
+                                nullable = false
+                                type = NavType.StringType
+                            }
+                            )
+                        ){
+                            ImagesScreen()
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    WithingsTestTheme {
-        Greeting("Android")
     }
 }
