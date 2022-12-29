@@ -25,7 +25,7 @@ class ImagesViewModel @Inject constructor(
     private val _imagesState = MutableStateFlow<ListImagesState>(ListImagesState.Loading)
     val imagesState: StateFlow<ListImagesState> = _imagesState.asStateFlow()
 
-    val selectedList = mutableListOf<SelectableImage>()
+    private val selectedList = mutableListOf<SelectableImage>()
 
     init {
         viewModelScope.launch {
@@ -62,6 +62,12 @@ class ImagesViewModel @Inject constructor(
             }
             list.set(index = index, element = updatedElement)
             _imagesState.value = ListImagesState.ListImages(list)
+        }
+    }
+
+    fun onCtaClicked(){
+        viewModelScope.launch{
+            _imagesState.value = ListImagesState.SelectedImages(selectedList)
         }
     }
 

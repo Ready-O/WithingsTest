@@ -9,5 +9,7 @@ interface ListImagesState {
 
     data class ListImages(val list: MutableList<SelectableImage>): ListImagesState
 
+    data class SelectedImages(val list: List<SelectableImage>): ListImagesState
+
     data class Error(val throwable: Throwable) : ListImagesState
 }
