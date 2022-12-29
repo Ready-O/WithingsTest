@@ -12,7 +12,7 @@ interface ImagesApi {
     ): ApiResponse
 
     companion object{
-        private const val API_KEY = "18021445-326cf5bcd3658777a9d22df6f "
+        private const val API_KEY = "18021445-326cf5bcd3658777a9d22df6f"
         private const val IMAGE_TYPE = "photo"
     }
 }
