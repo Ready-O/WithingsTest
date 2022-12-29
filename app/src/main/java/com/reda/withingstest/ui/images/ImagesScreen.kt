@@ -85,10 +85,14 @@ private fun ListImages(
             columns = GridCells.Fixed(2)
         ){
             itemsIndexed(list){ index,item ->
+                val isSelected = remember { mutableStateOf(item.isSelected) }
                 SelectableImageItem(
                     imageURL = item.imageUrl,
-                    isSelected = item.isSelected,
-                    onClick = { selectItem(index, item.id)}
+                    isSelected = isSelected.value,
+                    onClick = {
+                        isSelected.value = !(item.isSelected)
+                        selectItem(index, item.id)
+                    }
                 )
             }
         }

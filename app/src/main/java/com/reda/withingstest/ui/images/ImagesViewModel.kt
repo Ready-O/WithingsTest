@@ -58,7 +58,7 @@ class ImagesViewModel @Inject constructor(
                 selectedList.add(updatedElement)
             }
             else {
-                selectedList.remove(updatedElement)
+                selectedList.remove(element)
             }
             list.set(index = index, element = updatedElement)
             _imagesState.value = ListImagesState.ListImages(list)
