@@ -3,7 +3,6 @@ package com.reda.withingstest.ui.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
@@ -22,25 +21,24 @@ fun ImageItem(
     modifier: Modifier = Modifier,
     imageURL: String
 ){
-    Box(modifier = modifier){
-        AsyncImage(
-            modifier = Modifier.padding(4.dp).sizeIn(minHeight = 100.dp),
-            model = imageURL,
-            fallback = painterResource(id = R.drawable.ic_baseline_photo_24),
-            placeholder = painterResource(id = R.drawable.ic_baseline_photo_24),
-            contentDescription = null
-        )
-    }
+    AsyncImage(
+        modifier = modifier,
+        model = imageURL,
+        fallback = painterResource(id = R.drawable.ic_baseline_photo_24),
+        placeholder = painterResource(id = R.drawable.ic_baseline_photo_24),
+        contentDescription = null
+    )
 }
 
 @Composable
 fun SelectableImageItem(
+    modifier: Modifier = Modifier,
     imageURL: String,
     isSelected: Boolean,
     onClick: () -> Unit
 ){
     Box(
-        modifier = Modifier.clickable { onClick() }
+        modifier = modifier.clickable { onClick() }
     ){
         ImageItem(imageURL = imageURL)
         if (isSelected){

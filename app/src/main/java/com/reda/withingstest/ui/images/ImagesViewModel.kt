@@ -3,8 +3,7 @@ package com.reda.withingstest.ui.images
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.reda.withingstest.model.SelectableImage
-import com.reda.withingstest.model.toSelectable
+import com.reda.withingstest.model.Image
 import com.reda.withingstest.repository.ImageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,18 +24,18 @@ class ImagesViewModel @Inject constructor(
     private val _imagesState = MutableStateFlow<ListImagesState>(ListImagesState.Loading)
     val imagesState: StateFlow<ListImagesState> = _imagesState.asStateFlow()
 
-    private val selectedList = mutableListOf<SelectableImage>()
+    private val selectedList = mutableListOf<Image>()
 
     init {
         viewModelScope.launch {
             if(searchQuery != null){
                 imageRepository.fetchImages(searchQuery).collectLatest {
                     it.onSuccess { list ->
-                        val selectableList = mutableListOf<SelectableImage>()
+                        val selectableList = mutableListOf<Image>()
                         list.forEach { image ->
-                            selectableList.add(image.toSelectable())
+                            selectableList.add(image)
                         }
-                        _imagesState.value = ListImagesState.ListImages(selectableList)
+                        _imagesState.value = ListImagesState.ListImages(selectableList,selectedList.size)
                     }
                         .onFailure { throwable ->
                             _imagesState.value = ListImagesState.Error(throwable)
@@ -49,19 +48,17 @@ class ImagesViewModel @Inject constructor(
         }
     }
 
-    fun onSelectImage(index: Int,imageId: Int){
+    fun onSelectImage(imageId: Int, isSelected: Boolean){
         viewModelScope.launch {
             val list = (imagesState.value as ListImagesState.ListImages).list
             val element = list.first { it.id == imageId }
-            val updatedElement = element.copy(isSelected = !(element.isSelected))
-            if (updatedElement.isSelected){
-                selectedList.add(updatedElement)
+            if (isSelected){
+                selectedList.add(element)
             }
             else {
                 selectedList.remove(element)
             }
-            list.set(index = index, element = updatedElement)
-            _imagesState.value = ListImagesState.ListImages(list)
+            _imagesState.value = ListImagesState.ListImages(list,selectedList.size)
         }
     }
 
