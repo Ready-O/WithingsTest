@@ -42,9 +42,12 @@ fun SearchBar(
             value = query,
             placeholder = { Text("Search images")},
             onValueChange = onQueryUpdate,
+            maxLines = 1,
+            singleLine = true,
         )
         Button(
             modifier = Modifier.padding(horizontal = 8.dp),
+            enabled = query.isNotEmpty(),
             onClick = {
                 keyboardController?.hide()
                 onCtaClick()
